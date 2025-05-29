@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
+import path from 'path'
 
 export default defineConfig({
     plugins: [
@@ -29,4 +30,9 @@ export default defineConfig({
             },
         }),
     ],
+    resolve: {
+        alias: {
+            ziggy: path.resolve("vendor/tightenco/ziggy/dist/index.esm.js"),
+        },
+    },
 });

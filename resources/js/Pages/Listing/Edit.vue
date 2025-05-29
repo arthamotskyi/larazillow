@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="create">
+  <form @submit.prevent="update">
     <div>
       <div>
         <label>Beds</label>
@@ -66,7 +66,7 @@
       </div>
 
       <div>
-        <button type="submit">Create</button>
+        <button type="submit">Edit</button>
       </div>
     </div>
   </form>
@@ -76,18 +76,21 @@
 import { useForm } from '@inertiajs/vue3'
 import { route } from 'ziggy'
 
+const props = defineProps({
+  listing: Object,
+})
 const form = useForm({
-  beds: 0,
-  baths: 0,
-  area: 0,
-  city: null,
-  code: null,
-  street: null,
-  street_nr: null,
-  price: 0,
+  beds: props.listing.beds,
+  baths: props.listing.baths,
+  area: props.listing.area,
+  city: props.listing.city,
+  code: props.listing.code,
+  street: props.listing.street,
+  street_nr: props.listing.street_nr,
+  price: props.listing.price,
 })
 
-const create = () => form.post(route('listing.store'))
+const update = () => form.put(route('listing.update', {listing: props.listing.id}))
 </script>
 
 <style scoped>
