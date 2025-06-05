@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Listing;
+use Auth;
+use Gate;
 use Illuminate\Http\Request;
 
 class ListingController extends Controller
@@ -12,6 +14,7 @@ class ListingController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny',Listing::class);
         return inertia('Listing/Index',
         [
             'listings' => Listing::all()
@@ -31,7 +34,7 @@ class ListingController extends Controller
      */
     public function store(Request $request)
     {
-        Listing::create($request->validate([
+        $request->user()->listings()->create($request->validate([
                 'beds' => 'required|integer|min:0|max:20',
                 'baths' => 'required|integer|min:0|max:20',
                 'area' => 'required|integer|min:15|max:1500',
@@ -52,6 +55,7 @@ class ListingController extends Controller
      */
     public function show(Listing $listing)
     {
+        Gate::authorize('view',$listing);
         return inertia('Listing/Show',
         [
             'listing' => $listing
