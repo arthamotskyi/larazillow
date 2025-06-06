@@ -26,6 +26,7 @@ class ListingController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create',Listing::class);
         return inertia('Listing/Create');
     }
 
@@ -34,6 +35,7 @@ class ListingController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create',Listing::class);
         $request->user()->listings()->create($request->validate([
                 'beds' => 'required|integer|min:0|max:20',
                 'baths' => 'required|integer|min:0|max:20',
@@ -67,6 +69,7 @@ class ListingController extends Controller
      */
     public function edit(Listing $listing)
     {
+        Gate::authorize('update',$listing);
         return inertia('Listing/Edit',
         [
             'listing' => $listing
@@ -78,6 +81,7 @@ class ListingController extends Controller
      */
     public function update(Request $request, Listing $listing)
     {
+        Gate::authorize('update',$listing);
         $listing->update($request->validate([
                 'beds' => 'required|integer|min:0|max:20',
                 'baths' => 'required|integer|min:0|max:20',
@@ -99,6 +103,7 @@ class ListingController extends Controller
      */
     public function destroy(Listing $listing)
     {
+        Gate::authorize('delete',$listing);
         $listing->delete();
 
         return redirect()->back()
