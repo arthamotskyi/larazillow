@@ -12,7 +12,7 @@
                     <Link :href="route('realtor.listing.index')" class="text-sm text-gray-500">
                         {{ user.name }}
                     </Link>
-                    <Link :href="route('listing.create')"
+                    <Link :href="route('realtor.listing.create')"
                         class="btn-primary">+ New Listing</Link>
                     <div>
                         <Link :href="route('logout')" method="DELETE" as="button" class="cursor-pointer">
