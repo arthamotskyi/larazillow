@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Listing;
 use App\Models\Offer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ListingOfferController extends Controller
 {
     public function store(Listing $listing, Request $request)
     {
+        Gate::authorize('view', $listing);
         $listing->offers()->save(
             Offer::make(
                 $request->validate([
