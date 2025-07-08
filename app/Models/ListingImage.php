@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Str;
 
 class ListingImage extends Model
 {
@@ -16,6 +17,8 @@ class ListingImage extends Model
     }
 
     public function getSrcAttribute() {
-        return asset("storage/{$this->filename}");
+        return Str::startsWith($this->filename, ['http://', 'https://'])
+        ? $this->filename
+        : asset("storage/{$this->filename}");
     }
 }

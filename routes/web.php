@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\ListingImportController;
 use App\Http\Controllers\ListingOfferController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSeenController;
@@ -14,7 +15,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [IndexController::class, 'index']);
+Route::get('/', fn() => to_route('listing.index'));
 Route::get('/hello', [IndexController::class, 'show'])
     ->middleware('auth');
 
@@ -24,6 +25,9 @@ Route::resource('listing', ListingController::class)
 Route::resource('listing.offer', ListingOfferController::class)
     ->middleware('auth')
     ->only(['store']);
+
+Route::post('/listings/import', [ListingImportController::class, 'import'])
+    ->name('listings.import');
 
 Route::resource('notification', NotificationController::class)
     ->middleware('auth')
