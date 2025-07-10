@@ -13,6 +13,7 @@ use App\Http\Controllers\RealtorListingImageController;
 use App\Http\Controllers\UserAccountController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => to_route('listing.index'));
@@ -47,12 +48,21 @@ Route::get('/email/verify', function(){
     return inertia('Auth/VerifyEmail');
 })->middleware('auth')->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
+Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
+    $user = \App\Models\User::findOrFail($id);
+
+    if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        abort(403);
+    }
+
+    Auth::login($user);
+    if (! $user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+    }
 
     return redirect()->route('listing.index')
         ->with('success', 'Email was verified!');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+})->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
