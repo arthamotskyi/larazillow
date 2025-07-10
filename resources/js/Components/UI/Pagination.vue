@@ -3,7 +3,7 @@
     <template v-for="(link, index) in links" :key="index">
       <Link
         v-if="link.url"
-        :href="link.url"
+        :href="sanitizeLink(link.url)"
         class="py-2 px-4 rounded-md"
         :class="{ 'bg-indigo-500 dark:bg-indigo-800 text-gray-300': link.active }"
         v-html="link.label"
@@ -23,4 +23,10 @@ import { Link } from '@inertiajs/vue3'
 defineProps({
   links: Array,
 })
+
+const sanitizeLink = (url) => {
+  if (!url) return null
+  return url.replace(/^http:/, 'https:')
+}
+
 </script>
