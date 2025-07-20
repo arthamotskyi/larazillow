@@ -20,13 +20,20 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3'
+
 defineProps({
   links: Array,
 })
 
+const currentProtocol = window.location.protocol
+
 const sanitizeLink = (url) => {
   if (!url) return null
-  return url.replace(/^http:/, 'https:')
-}
 
+  const urlObj = new URL(url, window.location.origin)
+
+  urlObj.protocol = currentProtocol
+
+  return urlObj.toString()
+}
 </script>
